@@ -8,12 +8,12 @@ a requirement for the assignment.
 
 Below is a list of requirements from the doctor:
 
-# View all patients (both contacted and not contacted) - already implemented
+## View all patients (both contacted and not contacted) - already implemented
+This was already implemented but will be commented on later when I allow for a list update to occur :D!
 
+## View details of a single patient - already implemented
+This is also already implemented, but will be improved upon with the contact button
 
-
-
-# View details of a single patient - already implemented
 ## Some important Mentions before going further
 There were was one issued I had when starting the database, that was that the JSON text to run docker-compose missed its - and was unable to run Docker. 
 In my repository, you should be able to see the correct docker commmand to run the mariaDB db.
