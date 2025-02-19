@@ -7,20 +7,7 @@ import { useEffect, useState } from 'react';
 import { RouteComponentProps, useHistory, useLocation } from 'react-router-dom';
 import { PatientOverviewUrl, PatientUrl } from '../urls';
 
-/*
- * Try ot add a Button at the bottom of the screen with the outline mark that turns green
- * when the patient needs an update
- *
- * Create Tests with Jest unit testing increments decrements
- *
- * Add Function Specifications to all new Code
- *
- * Add Special Comment about Patch ORM and Database Json
- *
- * Write about these changes
- *
- * Send :)
- * */
+// Interface to handle incoming History from Patient-overview
 interface LocationState {
   totalPatients: number;
   isContacted: boolean;
@@ -60,20 +47,19 @@ export function PatientPage(props: PatientPageProps) {
   // Used to demarcate when to update the DB or ignore
   const [needsUpdate, setNeedsUpdate] = useState(!isContacted ?? false)
 
-
+  // Used to set the next patient from next/prev
   const [patientId, setPatientId] = useState(props?.match?.params?.patientId);
 
-
+  // Needed for 1 Based Indexing
   const [currentPosition, setCurrentPosition] = useState(currentIndex+1);
   const [remainingPatients, setRemainingPatients] = useState(totalPatients);
 
 
-  /**
-   * Fetch patient details when ID changes.
-   */
-// At the top of your component
 
-// Modify your useEffect
+/**
+ * Fetch patient details when ID changes.
+ * Also refreshes values for needsUpdate and MarkedCountact upon new  patient
+ */
 useEffect(() => {
     if (!patientId) {
         return;
@@ -96,12 +82,11 @@ useEffect(() => {
         });
 }, [patientId]);
 
-// Also, let's check the initial state values:
-
-
 
 /**
     Function to seperate api call to update patient contact status
+    Uses isContacted from history and update to determine if a send to the
+    DB is needed
  */
   const updateMarkedContact = (patientID: string) => {
     if (needsUpdate) {
@@ -119,11 +104,10 @@ useEffect(() => {
     }
   }
   /**
-   * Function for marking a patient as contacted or not contacted.
-   * @param newContactedValue
+   * Function for marking a patient as contacted or not contacted,
+   * Will change in memory patient info but not Database memory info
    *
-   * If the newContactValue is different from the update value then we need an update
-   */
+   *    */
 
   const markContacted = () => {
 
@@ -145,11 +129,10 @@ useEffect(() => {
   };
 
   /**
-   * Changes list item from marked to non marked
-   * depending on if update is needed
-   * NEEDS HOTFIX
+   * Changes current index position and updates the 1 based index displayed to user
+   * based on direction input
+   * @direction: boolean
    */
-
   const updateDirection = (direction: boolean) => {
     let newIndex:number;
 
@@ -168,7 +151,7 @@ useEffect(() => {
 
 
   /**
-   * Function for going to the previous patient.
+   * Function for going to the previous patient and sends updated history
    */
   const goToPreviousPatient = () => {
     if (currentIndex === 0){
@@ -189,8 +172,7 @@ useEffect(() => {
   };
 
   /**
-   * Function for going to the next patient.
-   * Calls updateList to check if List Mutation is needed and
+   * Function for going to the next patient.and sends updated history
    */
   const goToNextPatient =  () => {
     if (currentIndex >= remainingPatients){
@@ -213,7 +195,10 @@ useEffect(() => {
   };
 
 
-
+  /**
+   * Function is called when Patch to a DB is required, a new list is made from .filter() and
+   * a destructured tuple of currentIndex and newList is returned
+  */
   const updatedInformation = () => {
       if (!needsUpdate) {
           throw new Error("Contact information is already up to date");
@@ -261,6 +246,10 @@ useEffect(() => {
   };
 
 
+  /*
+   * Function that handles sending to the database and updating history
+   * CHECK updatedInformation() for more details
+   * */
   const sendPatientContactInfo = () => {
       try {
 
@@ -407,11 +396,11 @@ useEffect(() => {
           type="primary"
           style={{
             backgroundColor: !isContacted
-              ? (needsUpdate ? '#52c41a' : '#1890ff')  // On contacted list
-              : (!needsUpdate ? '#1890ff' : '#52c41a'), // On non-contacted list
+              ? (needsUpdate ? '#52c41a' : '#1890ff')
+              : (!needsUpdate ? '#1890ff' : '#52c41a'),
             borderColor: isContacted
-              ? (needsUpdate ? '#52c41a' : '#1890ff')  // On contacted list
-              : (!needsUpdate ? '#1890ff' : '#52c41a')  // On non-contacted list
+              ? (needsUpdate ? '#52c41a' : '#1890ff')
+              : (!needsUpdate ? '#1890ff' : '#52c41a')
           }}
           onClick={() => {
             sendPatientContactInfo();

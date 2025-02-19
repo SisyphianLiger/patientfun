@@ -1,3 +1,6 @@
+# TO REVIEWERS
+I have answered the requirements section in `REPORT.md`, so please look there for more detailed answers to my thoughtprocess.
+
 # Contact patient
 
 The goal of this project is to extend an existing website.

@@ -88,7 +88,7 @@ export function PatientOverviewPage() {
                                           .map(p => p.id);
 
 
-
+              // History pushed to patient-page
               history.push({
                 pathname: PatientUrl.replace(':patientId', record.id),
                 state: {

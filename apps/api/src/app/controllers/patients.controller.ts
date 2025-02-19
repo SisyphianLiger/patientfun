@@ -38,7 +38,6 @@ export class PatientsController {
     type: DetailedPatientDto,
   })
 
-  // The Problem here
   @Patch(':id')
   async update(
     @Param('id') id: string,
