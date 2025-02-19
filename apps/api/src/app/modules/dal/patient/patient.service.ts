@@ -71,8 +71,6 @@ export class PatientService {
    * @param patient   UpdatePatientDto.
    * @returns         DetailedPatientDto with updated data.
    */
-
-  // TODOS: COMMENT ON THE FIX HERE!!!!!
   async update(
     id: string,
     patient: UpdatePatientDto

@@ -54,7 +54,7 @@ export function PatientPage(props: PatientPageProps) {
   // Marked Button State
   const isContacted = location.state.isContacted;
 
-
+  // Used to Show Button color and interact with needsUpdate
   const [markedContacted, setMarkedContacted] = useState(isContacted ?? false);
 
   // Used to demarcate when to update the DB or ignore
@@ -114,7 +114,7 @@ useEffect(() => {
         .then((response) => {
         })
         .catch(error => {
-
+            throw new Error("Contact information is already up to date");
         })
     }
   }
@@ -186,6 +186,30 @@ useEffect(() => {
         }
       });
 
+  };
+
+  /**
+   * Function for going to the next patient.
+   * Calls updateList to check if List Mutation is needed and
+   */
+  const goToNextPatient =  () => {
+    if (currentIndex >= remainingPatients){
+      return;
+    }
+
+      const { updatedList, updatedIndex } =  updateDirection(true) as { updatedList: string[], updatedIndex: number };
+
+      setPatientId(updatedList[updatedIndex]);
+      history.push({
+        pathname: PatientUrl.replace(':patientId', String(updatedList[updatedIndex])),
+        state: {
+          totalPatients: remainingPatients,
+          currentIndex: updatedIndex,
+          patientIDs: updatedList,
+          isContacted: isContacted,
+
+        }
+      });
   };
 
 
@@ -267,29 +291,6 @@ useEffect(() => {
 
 
 
-  /**
-   * Function for going to the next patient.
-   * Calls updateList to check if List Mutation is needed and
-   */
-  const goToNextPatient =  () => {
-    if (currentIndex >= remainingPatients){
-      return;
-    }
-
-      const { updatedList, updatedIndex } =  updateDirection(true) as { updatedList: string[], updatedIndex: number };
-
-      setPatientId(updatedList[updatedIndex]);
-      history.push({
-        pathname: PatientUrl.replace(':patientId', String(updatedList[updatedIndex])),
-        state: {
-          totalPatients: remainingPatients,
-          currentIndex: updatedIndex,
-          patientIDs: updatedList,
-          isContacted: isContacted,
-
-        }
-      });
-  };
 
 
   // If loading patient, show loading animation
